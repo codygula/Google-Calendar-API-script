@@ -43,9 +43,8 @@ def sunset(mnth, dy, yr):
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 newevent = {
-  'summary': 'Google I/O 2015',
-  'location': '800 Howard St., San Francisco, CA 94103',
-  'description': 'A chance to hear more about Google\'s developer products.',
+  'summary': 'Golden Hour',
+  'location': 'Seattle, WA',
   'start': {
     'dateTime': '2023-02-8T09:00:00-07:00',
     'timeZone': 'America/Los_Angeles',
