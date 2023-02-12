@@ -14,6 +14,8 @@ from astral.sun import golden_hour
 from astral import SunDirection
 
 # (somewhat) WORKING thing to add new events to Google calendar. 
+# 
+# Follow instruction here https://developers.google.com/calendar/api/quickstart/python to create a credentials.json file. This will not work without it.
 #
 # This is intended to add the times for the Golden hour to Google calendar for each day. Two sets (beginning and end times) per day.
 #
@@ -27,34 +29,43 @@ from astral import SunDirection
 
 city = LocationInfo("Seattle", "Washington", "America/Los_Angeles", 47.6062, -122.3321 )
 
-def sunrise(mnth, dy, yr):
-
+def sunriseStart(mnth, dy, yr):
     time1, time2 = golden_hour(city.observer, direction=SunDirection.RISING, tzinfo=("America/Los_Angeles"), date=datetime.date(yr, mnth, dy))
-    return (time1.strftime("%Y-%m-%d") + "T" + time1.strftime("%H:%M:%S") + "-" + time2.strftime("%H:%M"))
+    return (time1.strftime("%Y-%m-%d") + "T" + time1.strftime("%H:%M:%S") + "-08:00")
 
-def sunset(mnth, dy, yr):
+def sunriseEnd(mnth, dy, yr):
+    time1, time2 = golden_hour(city.observer, direction=SunDirection.RISING, tzinfo=("America/Los_Angeles"), date=datetime.date(yr, mnth, dy))
+    return (time2.strftime("%Y-%m-%d") + "T" + time2.strftime("%H:%M:%S") + "-08:00")
 
+
+def sunsetStart(mnth, dy, yr):
     time1, time2 = golden_hour(city.observer, direction=SunDirection.SETTING, tzinfo=("America/Los_Angeles"), date=datetime.date(yr, mnth, dy))
-    return (time1.strftime("%Y-%m-%d") + "T" + time1.strftime("%H:%M:%S") + "-" + time2.strftime("%H:%M"))
+    return (time1.strftime("%Y-%m-%d") + "T" + time1.strftime("%H:%M:%S") + "-08:00")
+
+def sunsetEnd(mnth, dy, yr):
+    time1, time2 = golden_hour(city.observer, direction=SunDirection.SETTING, tzinfo=("America/Los_Angeles"), date=datetime.date(yr, mnth, dy))
+    return (time2.strftime("%Y-%m-%d") + "T" + time2.strftime("%H:%M:%S") + "-08:00")
 
 
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
+YEAR = 2023
 
-newevent = {
-  'summary': 'Golden Hour',
+
+newSunrise = {
+  'summary': 'Morning Golden Hour',
   'location': 'Seattle, WA',
   'start': {
-    'dateTime': '2023-02-8T09:00:00-07:00',
+    'dateTime': sunriseStart(2,24,YEAR),
     'timeZone': 'America/Los_Angeles',
   },
   'end': {
-    'dateTime': '2023-02-9T17:00:00-07:00',
+    'dateTime': sunriseEnd(2,24,YEAR),
     'timeZone': 'America/Los_Angeles',
   },
   'recurrence': [
-    'RRULE:FREQ=DAILY;COUNT=2'
+    'RRULE:FREQ=DAILY;COUNT=1'
   ],
   'attendees': [
     {'email': 'cgula7@gmail.com'}
@@ -67,7 +78,6 @@ newevent = {
     ],
   },
 }
-
 
 
 def main():
@@ -98,18 +108,13 @@ def main():
 
 
         # API call
-        event = service.events().insert(calendarId='cgula7@gmail.com', body=newevent).execute()
+        event = service.events().insert(calendarId='cgula7@gmail.com', body=newSunrise).execute()
         print( 'Event created: %s' % (event.get('htmlLink')))
         print(event)
-
-
 
     except HttpError as error:
         print('An error occurred: %s' % error)
 
-
-
-
-
 if __name__ == '__main__':
     main()
+
