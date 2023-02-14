@@ -7,5 +7,3 @@ This requires a credentials.json file in the same directory as the script. It ca
 https://developers.google.com/calendar/api/quickstart/python 
 
 There is no way to bulk delete these entries in Google calendar itself that I can figure out. The script could be modified to delete them with the API.
-
-This 
