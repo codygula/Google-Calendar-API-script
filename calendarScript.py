@@ -31,7 +31,6 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 YEAR = 2023
 
-
 city = LocationInfo("Seattle", "Washington", "America/Los_Angeles", 47.6062, -122.3321 )
 
 def sunriseStart(mnth, dy, yr):
@@ -49,8 +48,6 @@ def sunsetStart(mnth, dy, yr):
 def sunsetEnd(mnth, dy, yr):
     time1, time2 = golden_hour(city.observer, direction=SunDirection.SETTING, tzinfo=("America/Los_Angeles"), date=datetime.date(yr, mnth, dy))
     return (time2.strftime("%Y-%m-%d") + "T" + time2.strftime("%H:%M:%S") + "-08:00")
-
-
 
 ###
 ### Sunrise
@@ -74,7 +71,6 @@ def sunrise(month, day):
     'reminders': {
       'useDefault': False,
       'overrides': [
-        {'method': 'email', 'minutes': 24 * 60},
         {'method': 'popup', 'minutes': 10},
       ],
     },
@@ -103,7 +99,6 @@ def sunset(month, day):
     'reminders': {
       'useDefault': False,
       'overrides': [
-        {'method': 'email', 'minutes': 24 * 60},
         {'method': 'popup', 'minutes': 10},
       ],
     },
@@ -146,7 +141,6 @@ def main():
               event = service.events().insert(calendarId='cgula7@gmail.com', body=sunset(j,i)).execute()
               print( 'Event created: %s' % (event.get('htmlLink')))
               
-              
             except:
               print("Error! Day = ", i, ", Month = ", j)
           i += 1
@@ -154,9 +148,6 @@ def main():
 
     except HttpError as error:
         print('An error occurred: %s' % error)
-
-
-
 
 if __name__ == '__main__':
     main()
